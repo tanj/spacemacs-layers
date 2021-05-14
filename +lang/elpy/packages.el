@@ -9,7 +9,8 @@
 (defconst elpy-packages
   '(python
     elpy
-    jedi))
+    jedi
+    blacken))
 
 (defun elpy/init-python ()
   (use-package python
@@ -35,9 +36,14 @@
     :after python
     ))
 
+(defun elpy/init-blacken ()
+  (use-package blacken
+    :after python
+    ))
+
 (defun elpy/init-elpy ()
   (use-package elpy
-    :after (python jedi)
+    :after (python jedi blacken)
     :config
     ;; enable elpy
     (elpy-enable)
@@ -53,6 +59,7 @@
                   (setq company-minimum-prefix-length 2)
                   (setq company-idle-delay 2)
                   (define-key elpy-mode-map (kbd "C-<tab>") 'company-complete)))
+    (add-hook 'elpy-mode-hook 'blacken-mode)
 
     ;; python-mode key bindings
     (spacemacs/declare-prefix-for-mode 'python-mode "mh" "help")
