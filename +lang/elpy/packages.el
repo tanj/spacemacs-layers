@@ -10,6 +10,8 @@
   '(python
     elpy
     jedi
+    sphinx-doc
+    jinja2-mode
     blacken))
 
 (defun elpy/init-python ()
@@ -31,6 +33,24 @@
                 ))
     ))
 
+(defun elpy/init-sphinx-doc ()
+  (use-package sphinx-doc
+    :after elpy
+    :config
+    ;; set lighter
+    (diminish 'sphinx-doc-mode " ⓢd")
+    (add-hook 'elpy-mode-hook (lambda ()
+                                (require 'sphinx-doc)
+                                (sphinx-doc-mode t)))
+
+    )
+  )
+
+(defun elpy/init-jinja2-mode ()
+  (use-package jinja2-mode
+    :mode "\\.\\(jtx\\|jinja\\)\\'"
+    ))
+
 (defun elpy/init-jedi ()
   (use-package jedi
     :after python
@@ -39,6 +59,8 @@
 (defun elpy/init-blacken ()
   (use-package blacken
     :after python
+    :config
+    (diminish 'blacken-mode " Ⓑ")
     ))
 
 (defun elpy/init-elpy ()
@@ -54,10 +76,10 @@
     ;; configure auto-completion
     (setq elpy-rpc-backend "jedi")
     (add-hook  'elpy-mode-hook
-               '(lambda ()
+               (lambda ()
                   ;; after 2 seconds or C-tab
                   (setq company-minimum-prefix-length 2)
-                  (setq company-idle-delay 2)
+                  (setq company-idle-delay 1)
                   (define-key elpy-mode-map (kbd "C-<tab>") 'company-complete)))
     (add-hook 'elpy-mode-hook 'blacken-mode)
 
